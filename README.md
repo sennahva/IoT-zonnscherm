@@ -1,4 +1,4 @@
-# Automatic sunshade manuel 
+# Automatic sunshade manual 
 This is a manuel for combining information about the temperature inside your home and comming weather to make a sun shade automatic
 
 Requirements: 
