@@ -20,6 +20,7 @@ foto
 
 If you have the wrong library you will probebly get stuck when the ESP8266
 is trying to connect with the BMP280 but won't find it, and get the following error / message: 
+
 ![Schermafbeelding 2024-10-17 214524](https://github.com/user-attachments/assets/06d4eb79-5631-4476-ae34-a467e8bb8985)
 
 Then you can test your BMP280 with the example code, that you can find by file > examples > Adafruit BMP280 Library (might need to scroll down) > **bmp280test**. Where you only have to change line 37 from `status = bmp.begin();` to `status = bmp.begin(0x76);`. 
