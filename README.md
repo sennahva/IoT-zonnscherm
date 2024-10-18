@@ -15,14 +15,17 @@ Open your library manager with Sketch > include library > manage libraries, or t
 ![Group 19](https://github.com/user-attachments/assets/24df21c7-1c9f-4dfc-9f8f-3b57b513164d)
 ![Group 20](https://github.com/user-attachments/assets/437e4520-281c-4ace-b215-981c2b7f3216)
 
-When installing the libraries pay attention that you don't exedently download the library for the BME280, this is a very simular device but it works just a bit different where the code wont work. If you have the wrong library you will probebly get stuck when the ESP8266
+When installing the libraries pay attention that you don't exedently download the library for the BME280, this is a very simular device but it works just a bit different where the code wont work. 
+foto
+
+If you have the wrong library you will probebly get stuck when the ESP8266
 is trying to connect with the BMP280 but won't find it, and get the following error / message: 
 ![Schermafbeelding 2024-10-17 214524](https://github.com/user-attachments/assets/06d4eb79-5631-4476-ae34-a467e8bb8985)
 
 Then you can test your BMP280 with the example code, that you can find by file > examples > Adafruit BMP280 Library (might need to scroll down) > **bmp280test**. Where you only have to change line 37 from `status = bmp.begin();` to `status = bmp.begin(0x76);`. 
 ![Group 18](https://github.com/user-attachments/assets/0218cd4a-c74f-4a3b-b37d-0ce3ce2f48c6)
 
-Check if your BAUD rate matches te one in the code. 
+Check if your BAUD matches te one in the code. 
 ![Group 21](https://github.com/user-attachments/assets/302cb65a-3493-444d-85c6-c60b97e4521e)
 
 Witch if every thing works correct you will get the following message in your serialmonitor:
@@ -34,15 +37,15 @@ To predict the upcomming weather you can use [OpenWeather](https://openweather.c
 Then navigate to the "my API keys" tab, like this screenshot: 
 ![Group 23](https://github.com/user-attachments/assets/03ec4838-ad4e-465e-a3b8-dd01b509046a)
 
-Then generate a new API Key, and note this key for later: 
+Then generate a new API Key, and save this key for later: 
 ![Group 22](https://github.com/user-attachments/assets/890b2bb1-924e-4366-9fa3-a4340ea446b3)
 
 After you have created your account, you need to instal another library, `ArduinoJson` by Benoit Blanchon. With that we can use the code Emmanuel Odunlade wrote [here](https://randomnerdtutorials.com/esp8266-weather-forecaster/) as a start, but have to change a bit to make it work. 
 
 
 But what you will see is that this code still uses ArduinoJson 5, what needs to be changed to ArduinoJson 6+. Wich i couldn't really figure out. I tried to do the following things: 
-1. First i started with chancing the buffer size, originally it is on 2500 but no matter what it was it didn't work. 
-2. Using [Arduinojson](https://arduinojson.org/v6/doc/upgrade/) to change the Jsonbuffer. This is an artical where they explain the changes from ArduinoJson 5 and 6, wich i made the following with: 
+1. I started by adjusting the buffer size. Initially, it was set to 2500, but changing it didn’t resolve the issue.
+2. I used [this guide](https://arduinojson.org/v6/doc/upgrade/) to modify the JsonBuffer, in this article they explain the changes from ArduinoJson 5 and 6 resulting in the following code:
 ```
 void parseJson(const char * jsonString) {
   // Define the size of the JSON document based on the expected size of the JSON object.
@@ -84,7 +87,7 @@ void parseJson(const char * jsonString) {
 }
 ```
 
-3. Last i tried to debug the response, with te following: 
+3. I also tried debugging the response using this code:
 ``` 
 Serial.println("Response:");
   while (client.available()) {
@@ -93,16 +96,14 @@ Serial.println("Response:");
   }
 ```
 
-But this gave the following output, wich still means the buffer isn't working correct: 
+However, I still encountered buffer issues, which meant the data wasn't being processed correctly.
 
-
-
-But after all than it still would work, it connected with my board and wifi, but wouldn't give the weather information. 
+Although the code connects to the board and WiFi, it doesn't yet retrieve weather information.
 
 ## Combining 
-It won't work since the API isn't working, but you can still get far without it needing to work. 
+Although the weather API isn't fully functional, you can still work on the logic. 
 
-So first we want it to make automatic decision, where it takes the temperature from inside and the upcomming weather into consideration. So using the code that we have from the OpenWeather API, we can add the code from the BMP280 and the logic needed for this to work: 
+You can use temperature data from inside the house and upcoming weather predictions to automate the sunshade. Using the OpenWeather API code, you can add BMP280 sensor data and the necessary logic for automatic operation:
 ```
 void diffDataAction(String nowT, String later, String weatherType, ) {
   int indexNow = nowT.indexOf(weatherType);
@@ -125,7 +126,7 @@ void diffDataAction(String nowT, String later, String weatherType, ) {
 }
 ```
 
-In this way the Sunshade can work almost automatic, the only thing the user needs to do is set temperatures on what he finds to hot and cold. But after that the sunshade can check the temperature and the current and upcomming weather to make sure it wont extend the sunshade when it is raining or not needed, and vise versa. 
+This allows the sunshade to function almost automatically. The user only needs to set temperature thresholds for when it's considered too hot or too cold. After that, the sunshade can monitor the inside temperature and current/upcoming weather to ensure it doesn't extend unnecessarily during rain or other adverse weather conditions.
 
 ## Sources
 - https://github.com/msandholz/ESP8266-with-BME280
