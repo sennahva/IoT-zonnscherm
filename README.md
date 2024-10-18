@@ -16,6 +16,7 @@ Open your library manager with Sketch > include library > manage libraries, or t
 ![Group 20](https://github.com/user-attachments/assets/437e4520-281c-4ace-b215-981c2b7f3216)
 
 When installing the libraries pay attention that you don't exedently download the library for the BME280, this is a very simular device but it works just a bit different where the code wont work. 
+
 ![Schermafbeelding 2024-10-18 091911](https://github.com/user-attachments/assets/713a8f97-328a-40b2-a1c0-2837c12eccca)
 
 If you have the wrong library you will probebly get stuck when the ESP8266
