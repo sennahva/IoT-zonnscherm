@@ -1,6 +1,12 @@
 # Sunshade manuel 
 This is a manuel for combining information about the temperature inside your home and comming weather to make a sun shade automatic
 
+Requirements: 
+- Arduino IDE
+- NodeMCU ESP8266
+- BMP280
+- Wifi / Hotspot 
+
 ## 1. Measuring the tempeture 
 Connect the BMP280 to the NodeMCU board. Start by connecting the VCC(BMP280) pin to the 3.3V(ESP8266) output and the GND(BMP280) to the ground(ESP8266). 
 Than connect the SCL(BMP280) to the D1(ESP8266) pin and the SDA(BMP280) to D2(ESP8266). 
@@ -26,14 +32,15 @@ Then navigate to the "my API keys" tab, like this screenshot:
 Then generate a new API Key, and note the key: 
 
 
-After you have created your account, we can use the code Emmanuel Odunlade wrote [here](https://randomnerdtutorials.com/esp8266-weather-forecaster/) as a start.
-But what you will see is that this code still uses ArduinoJson 5, what needs to be changed to ArduinoJson 6+. So you do that with the following steps: 
-
-This is where i personaly got stuck, 
+After you have created your account, you need to instal another library, `ArduinoJson` by Benoit Blanchon. With that we can use the code Emmanuel Odunlade wrote [here](https://randomnerdtutorials.com/esp8266-weather-forecaster/) as a start, but have to change a bit to make it work. 
 
 
-installeren van de json library
+But what you will see is that this code still uses ArduinoJson 5, what needs to be changed to ArduinoJson 6+. Wich i could really figure out. I tried to do the following things: 
+1. Using [Arduinojson](https://arduinojson.org/v6/doc/upgrade/) to change to Jsonbuffer. 
+2. Debugging it by modifing the makehttpRequest()
+3. Changed the buffer size
 
+But after all than it still would work, it connected with my board and wifi, but wouldn't give the weather information. 
 
 ## Combining 
 It won't work since the API isn't working, but you can still get far without it needing to work. 
@@ -43,7 +50,6 @@ So first we want it to make automatic decision, where it takes the temperature f
 void diffDataAction(String nowT, String later, String weatherType, ) {
   int indexNow = nowT.indexOf(weatherType);
   int indexLater = later.indexOf(weatherType);
-  // if weather type = rain, if the current weather does not contain the weather type and the later message does, send notification
   if (bme.readTemperature() > 25) {
     if (weatherType == "rain" || weatherType == "snow" || weahterType == "hail") {
       //Sunshade doesn't extend, because it is / is going to rain
