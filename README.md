@@ -29,16 +29,68 @@ To predict the upcomming weather you can use [OpenWeather](https://openweather.c
 Then navigate to the "my API keys" tab, like this screenshot: 
 
 
-Then generate a new API Key, and note the key: 
+Then generate a new API Key, and note this key for later: 
 
 
 After you have created your account, you need to instal another library, `ArduinoJson` by Benoit Blanchon. With that we can use the code Emmanuel Odunlade wrote [here](https://randomnerdtutorials.com/esp8266-weather-forecaster/) as a start, but have to change a bit to make it work. 
 
 
-But what you will see is that this code still uses ArduinoJson 5, what needs to be changed to ArduinoJson 6+. Wich i could really figure out. I tried to do the following things: 
-1. Using [Arduinojson](https://arduinojson.org/v6/doc/upgrade/) to change to Jsonbuffer. 
-2. Debugging it by modifing the makehttpRequest()
-3. Changed the buffer size
+But what you will see is that this code still uses ArduinoJson 5, what needs to be changed to ArduinoJson 6+. Wich i couldn't really figure out. I tried to do the following things: 
+1. First i started with chancing the buffer size, originally it is on 2500 but no matter what it was it didn't work. 
+2. Using [Arduinojson](https://arduinojson.org/v6/doc/upgrade/) to change the Jsonbuffer. This is an artical where they explain the changes from ArduinoJson 5 and 6, wich i made the following with: 
+```
+void parseJson(const char * jsonString) {
+  // Define the size of the JSON document based on the expected size of the JSON object.
+  const size_t bufferSize = 2 * JSON_ARRAY_SIZE(1) + JSON_ARRAY_SIZE(2) + 4 * JSON_OBJECT_SIZE(1) + 3 * JSON_OBJECT_SIZE(2) + 3 * JSON_OBJECT_SIZE(4) + JSON_OBJECT_SIZE(5) + 2 * JSON_OBJECT_SIZE(7) + 2 * JSON_OBJECT_SIZE(8) + 720;
+  DynamicJsonDocument jsonBuffer(bufferSize);
+
+  // Deserialize the JSON document
+  DeserializationError error = deserializeJson(jsonBuffer, jsonString);
+
+  // Check if deserialization was successful
+  if (error) {
+    Serial.print("deserializeJson() failed: ");
+    Serial.println(error.f_str());
+    return;
+  }
+
+  // Extract values from the JSON object
+  JsonArray list = jsonBuffer["list"];
+  JsonObject nowT = list[0];
+  JsonObject later = list[1];
+
+  String city = jsonBuffer["city"]["name"];
+  
+  float tempNow = nowT["main"]["temp"];
+  float humidityNow = nowT["main"]["humidity"];
+  String weatherNow = nowT["weather"][0]["description"];
+
+  float tempLater = later["main"]["temp"];
+  float humidityLater = later["main"]["humidity"];
+  String weatherLater = later["weather"][0]["description"];
+
+  // Checking for four main weather possibilities
+  diffDataAction(weatherNow, weatherLater, "clear");
+  diffDataAction(weatherNow, weatherLater, "rain");
+  diffDataAction(weatherNow, weatherLater, "snow");
+  diffDataAction(weatherNow, weatherLater, "hail");
+
+  Serial.println();
+}
+```
+
+3. Last i tried to debug the response, with te following: 
+``` 
+Serial.println("Response:");
+  while (client.available()) {
+    char c = client.read();
+    Serial.print(c);  // Print each character of the response
+  }
+```
+
+But this gave the following output, wich still means the buffer isn't working correct: 
+
+
 
 But after all than it still would work, it connected with my board and wifi, but wouldn't give the weather information. 
 
