@@ -1,4 +1,4 @@
-# Sunshade manuel 
+# Automatic sunshade manuel 
 This is a manuel for combining information about the temperature inside your home and comming weather to make a sun shade automatic
 
 Requirements: 
@@ -7,7 +7,7 @@ Requirements:
 - BMP280
 - Wifi / Hotspot 
 
-## 1. Measuring the tempeture 
+## 1. Measuring the tempeture with BMP280
 Connect the BMP280 to the NodeMCU board. Start by connecting the VCC(BMP280) pin to the 3.3V(ESP8266) output and the GND(BMP280) to the ground(ESP8266). 
 Than connect the SCL(BMP280) to the D1(ESP8266) pin and the SDA(BMP280) to D2(ESP8266). 
 
@@ -33,7 +33,7 @@ Check if your BAUD matches te one in the code.
 Witch if every thing works correct you will get the following message in your serialmonitor:
 ![screenshot19239101](https://github.com/user-attachments/assets/f946d4df-d4d1-43c8-a856-0c8692acd287)
 
-## Weather API 
+## Weather forecaster with openweathermap API 
 To predict the upcomming weather you can use [OpenWeather](https://openweather.co.uk/). Once there start by creating (or loggin in) an account: 
 
 Then navigate to the "my API keys" tab, like this screenshot: 
@@ -102,7 +102,7 @@ However, I still encountered buffer issues, which meant the data wasn't being pr
 
 Although the code connects to the board and WiFi, it doesn't yet retrieve weather information.
 
-## Combining 
+## Combining the temperature and API
 Although the weather API isn't fully functional, you can still work on the logic. 
 
 You can use temperature data from inside the house and upcoming weather predictions to automate the sunshade. Using the OpenWeather API code, you can add BMP280 sensor data and the necessary logic for automatic operation:
