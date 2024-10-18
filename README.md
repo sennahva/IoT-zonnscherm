@@ -11,26 +11,31 @@ Requirements:
 Connect the BMP280 to the NodeMCU board. Start by connecting the VCC(BMP280) pin to the 3.3V(ESP8266) output and the GND(BMP280) to the ground(ESP8266). 
 Than connect the SCL(BMP280) to the D1(ESP8266) pin and the SDA(BMP280) to D2(ESP8266). 
 
-Open your library manager with Sketch > include library > manage libraries. Then install the following libraries: `Adafruit BMP280 Library` and `Adafruit Unified Sensor` both by Adafruit. 
+Open your library manager with Sketch > include library > manage libraries, or the library icon in the left side menu bar as seen in the screenshot. Then install the following libraries: `Adafruit BMP280 Library` and `Adafruit Unified Sensor` both by Adafruit. 
+![Group 19](https://github.com/user-attachments/assets/24df21c7-1c9f-4dfc-9f8f-3b57b513164d)
+![Group 20](https://github.com/user-attachments/assets/437e4520-281c-4ace-b215-981c2b7f3216)
 
-When installing the libraries pay attention that you don't exedently download the library for the BME280, this is a very simular device but it works just a bit different where the code wont work. If you have the wrong library you will probebly get stuck when the ESP8266 is trying to connect with the BMP280 but won't find it, and get the following error / message: 
+When installing the libraries pay attention that you don't exedently download the library for the BME280, this is a very simular device but it works just a bit different where the code wont work. If you have the wrong library you will probebly get stuck when the ESP8266
+is trying to connect with the BMP280 but won't find it, and get the following error / message: 
+![Schermafbeelding 2024-10-17 214524](https://github.com/user-attachments/assets/06d4eb79-5631-4476-ae34-a467e8bb8985)
 
 Then you can test your BMP280 with the example code, that you can find by file > examples > Adafruit BMP280 Library (might need to scroll down) > **bmp280test**. Where you only have to change line 37 from `status = bmp.begin();` to `status = bmp.begin(0x76);`. 
+![Group 18](https://github.com/user-attachments/assets/0218cd4a-c74f-4a3b-b37d-0ce3ce2f48c6)
 
 Check if your BAUD rate matches te one in the code. 
+![Group 21](https://github.com/user-attachments/assets/302cb65a-3493-444d-85c6-c60b97e4521e)
 
 Witch if every thing works correct you will get the following message in your serialmonitor:
-
+![screenshot19239101](https://github.com/user-attachments/assets/f946d4df-d4d1-43c8-a856-0c8692acd287)
 
 ## Weather API 
 To predict the upcomming weather you can use [OpenWeather](https://openweather.co.uk/). Once there start by creating (or loggin in) an account: 
 
-
 Then navigate to the "my API keys" tab, like this screenshot: 
-
+![Group 23](https://github.com/user-attachments/assets/03ec4838-ad4e-465e-a3b8-dd01b509046a)
 
 Then generate a new API Key, and note this key for later: 
-
+![Group 22](https://github.com/user-attachments/assets/890b2bb1-924e-4366-9fa3-a4340ea446b3)
 
 After you have created your account, you need to instal another library, `ArduinoJson` by Benoit Blanchon. With that we can use the code Emmanuel Odunlade wrote [here](https://randomnerdtutorials.com/esp8266-weather-forecaster/) as a start, but have to change a bit to make it work. 
 
